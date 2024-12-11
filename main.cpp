@@ -6,42 +6,45 @@
 #include <QTextBrowser>
 #include <QLabel>
 #include <QFileDialog>
-#include <QThread>
+#include <pthread.h>
 #include <QDirIterator>
-#include <QStringList>
 #include <QMutex>
+#include <queue>
+#include <iostream>
+#include <string>
+#include <map>
+#include <vector>
+#include <thread>
+#include <mutex>
 
-class FileSearchWorker : public QThread {
-    Q_OBJECT
+#include <QApplication>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QTextBrowser>
+#include <QLabel>
+#include <QFileDialog>
+#include <pthread.h>
+#include <QDirIterator>
+#include <QMutex>
+#include <queue>
+#include <iostream>
 
-public:
-    FileSearchWorker(const QString &directory, const QString &fileName, QObject *parent = nullptr)
-        : QThread(parent), m_directory(directory), m_fileName(fileName) {}
 
-signals:
-    void fileFound(const QString &filePath);
-    void searchFinished();
-
-protected:
-    void run() override {
-        searchDirectory(m_directory);
-        emit searchFinished();
-    }
-
-private:
-    QString m_directory;
-    QString m_fileName;
-
-    void searchDirectory(const QString &directory) {
-        QDirIterator it(directory, QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
-        while (it.hasNext()) {
-            QString filePath = it.next();
-            if (QFileInfo(filePath).fileName() == m_fileName) {
-                emit fileFound(filePath);
-            }
-        }
-    }
-};
+#include <QApplication>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QTextBrowser>
+#include <QLabel>
+#include <QFileDialog>
+#include <pthread.h>
+#include <QDirIterator>
+#include <QMutex>
+#include <queue>
+#include <iostream>
 
 class FileSearchApp : public QWidget {
     Q_OBJECT
@@ -64,7 +67,7 @@ public:
 
         QHBoxLayout *directoryLayout = new QHBoxLayout();
         m_directoryInput = new QLineEdit(this);
-        m_directoryInput->setText("/");
+        m_directoryInput->setText("/");  // default to root directory
         directoryLayout->addWidget(m_directoryInput);
 
         QPushButton *browseButton = new QPushButton("Select Directory", this);
@@ -101,28 +104,79 @@ private slots:
             return;
         }
 
-        FileSearchWorker *worker = new FileSearchWorker(directory, fileName, this);
-
-        connect(worker, &FileSearchWorker::fileFound, this, &FileSearchApp::onFileFound);
-        connect(worker, &FileSearchWorker::searchFinished, this, &FileSearchApp::onSearchFinished);
-        connect(worker, &FileSearchWorker::finished, worker, &QObject::deleteLater);
-
         m_resultsView->append("Search started...");
-        worker->start();
+
+        // Создаем параметры для потока
+        SearchParams *params = new SearchParams{directory.toStdString(), fileName.toStdString(), this};
+
+        // Создаем поток
+        pthread_t thread;
+        if (pthread_create(&thread, nullptr, FileSearchApp::searchDirectory, params) != 0) {
+            m_resultsView->append("Failed to create thread.");
+            delete params;
+            return;
+        }
+
+        // Ждем завершения потока с использованием pthread_join
+        if (pthread_join(thread, nullptr) != 0) {
+            m_resultsView->append("Failed to join thread.");
+            delete params;
+            return;
+        }
+
+        // После завершения потока, обработаем результаты
+        processResults();
     }
 
-    void onFileFound(const QString &filePath) {
-        m_resultsView->append(filePath);
+    static void *searchDirectory(void *arg) {
+        SearchParams *params = static_cast<SearchParams *>(arg);
+        std::string directory = params->directory;
+        std::string fileName = params->fileName;
+        FileSearchApp *app = params->app;
+
+        QDirIterator it(QString::fromStdString(directory), QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
+
+        while (it.hasNext()) {
+            QString filePath = it.next();
+            if (QFileInfo(filePath).fileName() == QString::fromStdString(fileName)) {
+                // Помещаем найденный путь в очередь результатов
+                std::lock_guard<std::mutex> lock(app->m_mutex);
+                app->m_resultsQueue.push(filePath.toStdString());
+            }
+        }
+
+        // После завершения поиска добавляем сообщение о завершении
+        std::lock_guard<std::mutex> lock(app->m_mutex);
+        app->m_resultsQueue.push("Search finished.");
+
+        // Удаляем параметры потока после завершения
+        delete params;
+        return nullptr;
     }
 
-    void onSearchFinished() {
-        m_resultsView->append("Search finished.");
+    // Обработка результатов поиска
+    void processResults() {
+        // Проверяем очередь на наличие результатов
+        while (!m_resultsQueue.empty()) {
+            std::string result = m_resultsQueue.front();
+            m_resultsQueue.pop();
+            m_resultsView->append(QString::fromStdString(result));
+        }
     }
 
 private:
+    struct SearchParams {
+        std::string directory;
+        std::string fileName;
+        FileSearchApp *app;
+    };
+
     QLineEdit *m_fileNameInput;
     QLineEdit *m_directoryInput;
     QTextBrowser *m_resultsView;
+
+    std::mutex m_mutex;  // Мьютекс для синхронизации доступа
+    std::queue<std::string> m_resultsQueue;  // Очередь для передачи результатов
 };
 
 int main(int argc, char *argv[]) {
@@ -135,3 +189,4 @@ int main(int argc, char *argv[]) {
 }
 
 #include "main.moc"
+
