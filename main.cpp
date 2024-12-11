@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QTextBrowser>
 #include <QLabel>
+#include <QFileDialog>
 #include <QThread>
 #include <QDirIterator>
 #include <QStringList>
@@ -61,9 +62,16 @@ public:
         QLabel *labelDirectory = new QLabel("Enter start directory:", this);
         layout->addWidget(labelDirectory);
 
+        QHBoxLayout *directoryLayout = new QHBoxLayout();
         m_directoryInput = new QLineEdit(this);
         m_directoryInput->setText("/");
-        layout->addWidget(m_directoryInput);
+        directoryLayout->addWidget(m_directoryInput);
+
+        QPushButton *browseButton = new QPushButton("Select Directory", this);
+        directoryLayout->addWidget(browseButton);
+        layout->addLayout(directoryLayout);
+
+        connect(browseButton, &QPushButton::clicked, this, &FileSearchApp::browseDirectory);
 
         QPushButton *searchButton = new QPushButton("Search", this);
         layout->addWidget(searchButton);
@@ -75,6 +83,13 @@ public:
     }
 
 private slots:
+    void browseDirectory() {
+        QString directory = QFileDialog::getExistingDirectory(this, "Select Directory", "/");
+        if (!directory.isEmpty()) {
+            m_directoryInput->setText(directory);
+        }
+    }
+
     void startSearch() {
         m_resultsView->clear();
 

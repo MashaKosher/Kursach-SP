@@ -420,19 +420,8 @@ CMakeFiles/Kursach1.dir/main.cpp.o: /home/mashakosher/Kursach1/main.cpp \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlabel.h \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/qpicture.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qiodevice.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/QThread \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/qthread.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/qdeadlinetimer.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/qelapsedtimer.h \
-  /usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/future \
-  /usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/mutex \
-  /usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/bits/std_mutex.h \
-  /usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/bits/unique_lock.h \
-  /usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/condition_variable \
-  /usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/bits/atomic_futex.h \
-  /usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/bits/std_thread.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/QDirIterator \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/qdiriterator.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QFileDialog \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qfiledialog.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qdir.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qfile.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qfiledevice.h \
@@ -471,6 +460,20 @@ CMakeFiles/Kursach1.dir/main.cpp.o: /home/mashakosher/Kursach1/main.cpp \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qdatetime.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qcalendar.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdialog.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QThread \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qthread.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qdeadlinetimer.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qelapsedtimer.h \
+  /usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/future \
+  /usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/mutex \
+  /usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/bits/std_mutex.h \
+  /usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/bits/unique_lock.h \
+  /usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/condition_variable \
+  /usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/bits/atomic_futex.h \
+  /usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/bits/std_thread.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QDirIterator \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qdiriterator.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QStringList \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QMutex \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qmutex.h \
