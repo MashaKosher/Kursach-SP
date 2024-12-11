@@ -17,49 +17,6 @@
 #include <thread>
 #include <mutex>
 
-#include <QApplication>
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QTextBrowser>
-#include <QLabel>
-#include <QFileDialog>
-#include <pthread.h>
-#include <QDirIterator>
-#include <QMutex>
-#include <queue>
-#include <iostream>
-
-
-#include <QApplication>
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QTextBrowser>
-#include <QLabel>
-#include <QFileDialog>
-#include <pthread.h>
-#include <QDirIterator>
-#include <QMutex>
-#include <queue>
-#include <iostream>
-
-#include <QApplication>
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QTextBrowser>
-#include <QLabel>
-#include <QFileDialog>
-#include <pthread.h>
-#include <QDirIterator>
-#include <QMutex>
-#include <queue>
-#include <iostream>
-
 class FileSearchApp : public QWidget {
     Q_OBJECT
 
