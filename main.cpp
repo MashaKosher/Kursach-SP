@@ -46,11 +46,25 @@
 #include <queue>
 #include <iostream>
 
+#include <QApplication>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QTextBrowser>
+#include <QLabel>
+#include <QFileDialog>
+#include <pthread.h>
+#include <QDirIterator>
+#include <QMutex>
+#include <queue>
+#include <iostream>
+
 class FileSearchApp : public QWidget {
     Q_OBJECT
 
 public:
-    FileSearchApp(QWidget *parent = nullptr) : QWidget(parent) {
+    FileSearchApp(QWidget *parent = nullptr) : QWidget(parent), m_foundFilesCount(0) {
         setWindowTitle("File Search");
         resize(600, 400);
 
@@ -95,6 +109,7 @@ private slots:
 
     void startSearch() {
         m_resultsView->clear();
+        m_foundFilesCount = 0;  // сбрасываем счетчик перед новым поиском
 
         QString fileName = m_fileNameInput->text();
         QString directory = m_directoryInput->text();
@@ -126,6 +141,8 @@ private slots:
 
         // После завершения потока, обработаем результаты
         processResults();
+        // Выводим количество найденных файлов
+        m_resultsView->append(QString("Total files found: %1").arg(m_foundFilesCount));
     }
 
     static void *searchDirectory(void *arg) {
@@ -142,6 +159,7 @@ private slots:
                 // Помещаем найденный путь в очередь результатов
                 std::lock_guard<std::mutex> lock(app->m_mutex);
                 app->m_resultsQueue.push(filePath.toStdString());
+                app->m_foundFilesCount++;  // увеличиваем счетчик найденных файлов
             }
         }
 
@@ -177,6 +195,7 @@ private:
 
     std::mutex m_mutex;  // Мьютекс для синхронизации доступа
     std::queue<std::string> m_resultsQueue;  // Очередь для передачи результатов
+    int m_foundFilesCount;  // Счетчик найденных файлов
 };
 
 int main(int argc, char *argv[]) {
